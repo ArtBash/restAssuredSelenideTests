@@ -6,6 +6,9 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.ITestResult;
@@ -19,7 +22,7 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.*;
 import static io.restassured.RestAssured.given;
 
-@Listeners(AllureTestListener.class)
+@Listeners({AllureTestListener.class, LogListener.class})
 public class SwaggerPetstoreTest {
 
 
@@ -54,7 +57,7 @@ public class SwaggerPetstoreTest {
                 .extract().response();
 
         // Добавляем вложение в отчет Allure
-        //Allure.addAttachment("Response Body", response.getBody().asString());
+        Allure.addAttachment("Response Body", response.getBody().asString());
         return response;
     }
 
@@ -68,7 +71,7 @@ public class SwaggerPetstoreTest {
         Assert.assertEquals(responsePetId, petId, "ID питомца не совпадает с ожидаемым");
 
         // Добавляем вложение в отчет Allure
-       // Allure.addAttachment("Pet Response", response.getBody().asString());
+        Allure.addAttachment("Pet Response", response.getBody().asString());
     }
 
     @Test
@@ -103,7 +106,7 @@ public class SwaggerPetstoreTest {
         for (String responseStatus : responseStatuses) {
             Assert.assertEquals(responseStatus, status, "Статус животного не совпадает с ожидаемым");
         }
-//        Allure.addAttachment("Pets by Status Response", response.getBody().asString());
+        Allure.addAttachment("Pets by Status Response", response.getBody().asString());
     }
 
     @Test
